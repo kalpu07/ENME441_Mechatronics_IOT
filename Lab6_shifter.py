@@ -9,6 +9,27 @@ GPIO.setmode(GPIO.BCM)
 
 #Implementing the Shifter Class
 
+# Kalp Upadhayay
+# Lab 6 - Shifter and Bug Class File
+
+import RPi.GPIO as GPIO
+import time
+import random 
+
+GPIO.setmode(GPIO.BCM)
+
+#Implementing the Shifter Class
+# Kalp Upadhayay
+# Lab 6 - Shifter and Bug Class File
+
+import RPi.GPIO as GPIO
+import time
+import random 
+
+GPIO.setmode(GPIO.BCM)
+
+#Implementing the Shifter Class
+
 class Shifter:
 
     #Runs everytime a shifter is created
@@ -34,12 +55,16 @@ class Shifter:
 
         GPIO.output(self.latchPin, GPIO.LOW)
 
+        # FIX: Create a temporary variable so we don't modify the original
+        temp_byte = data_byte
+
         #Looping bit by bit
         for i in range(8):
 
-            #Checking the most significant bit
-            if data_byte & 0x80:
-                #If but is 1, its HIGH
+            # FIX: Check each bit from MSB to LSB correctly
+            # Check the current MSB (bit 7)
+            if temp_byte & 0x80:
+                #If bit is 1, its HIGH
                 GPIO.output(self.serialPin, GPIO.HIGH)
             else:
                 #In this its 0 so its set to low
@@ -48,8 +73,8 @@ class Shifter:
             #Clocks the single bit into the register
             self._ping()
 
-            #Shifting the data one positions left for the next increment
-            data_byte = data_byte << 1
+            # FIX: Shift the temporary variable, not the original
+            temp_byte = temp_byte << 1
 
         GPIO.output(self.latchPin, GPIO.HIGH)
 
