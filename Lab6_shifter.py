@@ -53,6 +53,11 @@ class Shifter:
 
         GPIO.output(self.latchPin, GPIO.HIGH)
 
+    # FIX: Added all_off method for completeness
+    def all_off(self):
+        """Turns off all 8 LEDs by shifting a byte of zeros."""
+        self.shiftByte(0x00)
+
 class Bug:
 
     def __init__(self, serial_pin, clock_pin, latch_pin, timestep = 0.1, x=3, isWrapOn=False):
@@ -67,6 +72,9 @@ class Bug:
 
         self._is_running = False
 
+        # FIX: Initialize the display to show starting position
+        self.__shifter.shiftByte(1 << self.x)
+
     def move_step_display(self):
 
         # CRUCIAL FIX 2: Must be [-1, 1] to allow movement in both left and right directions
@@ -75,10 +83,10 @@ class Bug:
 
         if self.isWrapOn:
             #Wrapping around 0-7
-            self.x = (new_x + 8) %8
+            self.x = (new_x + 8) % 8
         else:
             # If the new positions is within 0-7 accept it
-            if new_x >= 0 and new_x <=7:
+            if new_x >= 0 and new_x <= 7:
                 self.x = new_x
 
         #Updating Display - converting the position
@@ -88,27 +96,21 @@ class Bug:
         self.__shifter.shiftByte(data_to_send)
 
     def start(self):
-
+        # FIX: Just set the running flag - don't use infinite loop here
         self._is_running = True
-
-        try:
-            #runs as long as bug is set to be running
-            while self._is_running:
-
-                #Uses the helper method above to determine next step, wraps, and converts position
-                self.move_step_display()
-
-                #Holding for required time
-                time.sleep(self.timestep)
-
-        # CRUCIAL FIX 4: Correct capitalization is required for the Python exception
-        except KeyboardInterrupt:
-            self.stop()
+        # FIX: Make sure LED is on when starting
+        self.__shifter.shiftByte(1 << self.x)
 
     def stop(self):
-
         #Just stops the movement the turns the led off
         self._is_running = False
-
         #Displays 0x00
         self.__shifter.shiftByte(0x00)
+
+    # FIX: Added step method for controlled movement from main loop
+    def step(self):
+        """Execute one movement step if running - called from main loop"""
+        if self._is_running:
+            self.move_step_display()
+            return True
+        return False
