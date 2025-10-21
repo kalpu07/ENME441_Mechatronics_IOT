@@ -9,27 +9,6 @@ GPIO.setmode(GPIO.BCM)
 
 #Implementing the Shifter Class
 
-# Kalp Upadhayay
-# Lab 6 - Shifter and Bug Class File
-
-import RPi.GPIO as GPIO
-import time
-import random 
-
-GPIO.setmode(GPIO.BCM)
-
-#Implementing the Shifter Class
-# Kalp Upadhayay
-# Lab 6 - Shifter and Bug Class File
-
-import RPi.GPIO as GPIO
-import time
-import random 
-
-GPIO.setmode(GPIO.BCM)
-
-#Implementing the Shifter Class
-
 class Shifter:
 
     #Runs everytime a shifter is created
