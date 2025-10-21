@@ -1,4 +1,7 @@
-#Kaqlp Upadhayay FINAL
+#Kalp Upadhayay
+#ENME441 - Lab 6 Shift Registers
+
+#Shifter and Bug Classes
 
 import RPi.GPIO as GPIO
 import time
@@ -18,19 +21,28 @@ class Shifter:
 
         # Setting up GPIO pins
         GPIO.setup(self.serialPin, GPIO.OUT)
-        GPIO.setup(self.latchPin, GPIO.OUT, initial=0)
-        GPIO.setup(self.clockPin, GPIO.OUT, initial=0)
+        GPIO.setup(self.latchPin, GPIO.OUT)
+        GPIO.setup(self.clockPin, GPIO.OUT)
 
-    # method that pings either clock or latch pin
+        #Starting with Latch and Clock Pins Low
+        GPIO.output(latch_pin, GPIO.LOW)
+        GPIO.output(clock_pin, GPIO.LOW)
+        #Serial pin can start at any state, doesn't matter
+
+    # Private method that pings either clock or latch pin
     def __ping(self, pin):
-        GPIO.output(pin, 1)
+        GPIO.output(pin, 1) #Turning on
         time.sleep(0)
-        GPIO.output(pin, 0)
+        GPIO.output(pin, 0) #Turning Off
 
     # sends bytpe of data to output
     def shiftByte(self, data_byte):
         for i in range(8):
-            GPIO.output(self.serialPin, data_byte & (1 << i))
+            #Checks if current bit is 0 or 1
+            if data_byte & (1 << i):
+                GPIO.output(self.serialPin, GPIO.HIGH) # Bit is 1
+            else:
+                GPIO.output(self.serialPin, GPIO.LOW) #Bit is 0
             self.__ping(self.clockPin)  # add bit to register
         self.__ping(self.latchPin)  # send register to output
 
@@ -52,20 +64,24 @@ class Bug:
         # Show starting position
         self.__shifter.shiftByte(1 << self.x)
 
+    #Just starts the bug moving - turns the flag to true
     def start(self):
-        """Start the bug moving"""
         self.is_moving = True
+        print("Bug started moving")
 
+    #Stop the bug turn off LED
     def stop(self):
-        """Stop the bug and turn off LED"""
         self.is_moving = False
         self.__shifter.shiftByte(0)
+        print("Bug stopped, and LED is OFF")
 
+    # Moving the bug one step
     def move(self):
-        """Move the bug one step - call this repeatedly"""
-        if not self.is_moving:
+
+        #Checks to see if bug is moving if not it exits
+        if self.is_moving == False:
             return
-            
+        
         # Random step: left or right
         step = random.choice([-1, 1])
         new_x = self.x + step
