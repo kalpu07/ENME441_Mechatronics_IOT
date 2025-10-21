@@ -1,12 +1,13 @@
-<<<<<<< HEAD
 ##Kalp Upadhayay
 #ENME441 - Lab 6 
+
+# Bug File
 
 #Bug.py program to run
 
 import RPi.GPIO as GPIO
 import time
-from shifter import bug 
+from Lab6_shifter import bug 
 
 #Defining Pins
 
@@ -30,19 +31,20 @@ DEBOUNCE_TIME = 0.2
 bug = Bug(serial_pin, clock_pin, latch_pin)
 
 #GPIO pins setup
-GPIO.setup(s1_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.setup(s2_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.setup(s3_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(s1_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(s2_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(s3_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 try:
 
-	while True:
-		s1_state = GPIO.input(s1_PIN)
-        s2_state = GPIO.input(s1_PIN)
-        s3_state = GPIO.input(s3_PIN)
+    while True:
+
+        s1_state = GPIO.input(s1_pin)
+        s2_state = GPIO.input(s2_pin)
+        s3_state = GPIO.input(s3_pin)
 
 
-         # ------------On Off Control -------------------------------------------
+            # ------------On Off Control -------------------------------------------
         if s1_state == GPIO.HIGH:
             # S1 ON: Move the Bug one step
             bug.move_step_display()
@@ -74,10 +76,10 @@ try:
         prev_s2_state = s2_state # Update state for next loop iteration
         
 
-    except KeyboardInterrupt:
-        print("\nProgram stopped by user.")
-    
-    finally:
-        # Clean up GPIO settings on exit
-        bug.stop() # Ensure the display is explicitly turned off
-        GPIO.cleanup()
+except KeyboardInterrupt:
+    print("\nProgram stopped by user.")
+
+finally:
+    # Clean up GPIO settings on exit
+    bug.stop() # Ensure the display is explicitly turned off
+    GPIO.cleanup()
