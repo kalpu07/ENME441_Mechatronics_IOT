@@ -37,18 +37,11 @@ class Shifter:
 
     # sends bytpe of data to output
     def shiftByte(self, data_byte):
-        
-        GPIO.output(self.latchPin, GPIO.LOW)
-
         for i in range(8):
-            #Checks if current bit is 0 or 1
-            if data_byte & (1 << i):
-                GPIO.output(self.serialPin, GPIO.HIGH) # Bit is 1
-            else:
-                GPIO.output(self.serialPin, GPIO.LOW) #Bit is 0
+            GPIO.output(self.serialPin, data_byte & (1 << i))
             self.__ping(self.clockPin)  # add bit to register
+        self.__ping(self.latchPin)  # send register to output
         
-        GPIO.output(self.latchPin, GPIO.HIGH)
 
 # ------------------------Bug Class-----------------------------------------
 class Bug:
