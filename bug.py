@@ -53,7 +53,7 @@ try:
         # ------------On Off Control -------------------------------------------
         if s1_state == GPIO.HIGH:
             # FIX: Use proper start() method instead of direct movement
-            if not bug._running:
+            if not bug._is_running:
                 bug.start()
             
             # FIX: Non-blocking timing for movement
