@@ -7,7 +7,7 @@
 
 import RPi.GPIO as GPIO
 import time
-from Lab6_shifter import bug 
+from Lab6_shifter import Bug 
 
 #Defining Pins
 
