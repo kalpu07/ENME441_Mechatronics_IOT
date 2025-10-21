@@ -80,7 +80,7 @@ try:
                 bug.move()
                 last_move_time = current_time
         
-        time.sleep(0.01) #Adding small delay
+        time.sleep(0.001) #Adding small delay
 
 except KeyboardInterrupt:
     print("\nProgram stopped")
