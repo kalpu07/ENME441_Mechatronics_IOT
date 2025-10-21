@@ -70,9 +70,9 @@ try:
         
         # Changes the speed to 3 times when changed
         if s3_state == GPIO.HIGH:
-            bug.timestep = default_speed / 3
+            bug.timestep = 0.033
         else:
-            bug.timestep = default_speed
+            bug.timestep = 0.1
         
         # Move bug if it's running and time for next step
         if bug.is_moving and (current_time - last_move_time >= bug.timestep):
