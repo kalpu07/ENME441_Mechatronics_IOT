@@ -37,6 +37,7 @@ class Shifter:
             GPIO.output(self.serialPin, data_byte & (1 << i))
             self.__ping(self.clockPin)  # add bit to register
         self.__ping(self.latchPin)  # send register to output
+        time.sleep(0.0005)
         
 
 # ------------------------Bug Class-----------------------------------------
