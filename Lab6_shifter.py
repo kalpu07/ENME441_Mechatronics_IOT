@@ -33,14 +33,6 @@ class Shifter:
     # sends bytpe of data to output
     def shiftByte(self, data_byte):
 
-        GPIO.output(self.latchPin, GPIO.LOW)
-        for i in range(8):
-            GPIO.output(self.serialPin, GPIO.LOW)  # Clear all bits
-            self.__ping(self.clockPin)
-        GPIO.output(self.latchPin, GPIO.HIGH)
-
-        GPIO.output(self.latchPin, GPIO.LOW)
-
         for i in range(8):
             GPIO.output(self.serialPin, data_byte & (1 << i))
             self.__ping(self.clockPin)  # add bit to register
@@ -95,6 +87,8 @@ class Bug:
             # Bounce off edges
             if 0 <= new_x <= 7:
                 self.x = new_x
+                
+        print(f"LED should be at position {self.x}")
         
         # Update LED display
         self.__shifter.shiftByte(1 << self.x)
