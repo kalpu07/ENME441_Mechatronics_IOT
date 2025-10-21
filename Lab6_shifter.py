@@ -21,8 +21,8 @@ class Shifter:
 
         # Setting up GPIO pins
         GPIO.setup(self.serialPin, GPIO.OUT)
-        GPIO.setup(self.latchPin, GPIO.OUT, initial = GPIO.LOW)
-        GPIO.setup(self.clockPin, GPIO.OUT, initial = GPIO.LOW)
+        GPIO.setup(self.latchPin, GPIO.OUT, initial = 0)
+        GPIO.setup(self.clockPin, GPIO.OUT, initial = 0)
 
     # Private method that pings either clock or latch pin
     def __ping(self, pin):
