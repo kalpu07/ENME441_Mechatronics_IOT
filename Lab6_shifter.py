@@ -31,11 +31,11 @@ class Shifter:
             self.__ping(self.clockPin)  # add bit to register
         self.__ping(self.latchPin)  # send register to output
 
-    try:
-        shifter = Shifter(23, 25, 24)  # data, clock, latch pins
-        while True:
-            for i in range(2**8):
-                shifter.shiftByte(i)
-                time.sleep(0.5)
-    except KeyboardInterrupt:
-        GPIO.cleanup()
+try:
+    shifter = Shifter(23, 25, 24)  # data, clock, latch pins
+    while True:
+        for i in range(2**8):
+            shifter.shiftByte(i)
+            time.sleep(0.5)
+except KeyboardInterrupt:
+    GPIO.cleanup()
