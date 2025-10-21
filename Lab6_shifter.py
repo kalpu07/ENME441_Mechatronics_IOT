@@ -7,9 +7,6 @@ import random
 
 GPIO.setmode(GPIO.BCM)
 
-
-#dataPin, latchPin, clockPin = 23, 24, 25
-
 #Implementing the Shifter Class
 
 class Shifter:
