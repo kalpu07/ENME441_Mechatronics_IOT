@@ -78,7 +78,7 @@ try:
         if bug.is_moving:
             if current_time - last_move_time >= bug.timestep:
                 bug.move()
-            last_move_time = current_time
+                last_move_time = current_time
         
         time.sleep(0.01) #Adding small delay
 
