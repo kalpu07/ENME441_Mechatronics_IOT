@@ -64,7 +64,7 @@ try:
         else:
             # S1 OFF: Turn off the display
             # FIX: Only call stop() if currently running to avoid repeated calls
-            if bug._running:
+            if bug._is_running:
                 bug.stop() 
         
         # -----------------Speed Control----------------------------------------
