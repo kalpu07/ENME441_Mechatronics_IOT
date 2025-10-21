@@ -3,34 +3,34 @@ import time
 
 GPIO.setmode(GPIO.BCM)
 
+# ------------------------Shifter Class-----------------------------------------
 class Shifter:
-    # Runs every time a Shifter is created
+    
+    #INIT method runs evertime a new object is created 
     def __init__(self, serial_pin, clock_pin, latch_pin):
-        # Assigning passed values to class attributes
+        # Assigning values to attributes
         self.serialPin = serial_pin
         self.clockPin = clock_pin  
         self.latchPin = latch_pin
 
-        # GPIO Configuration - start latch & clock low
+        # Setting up GPIO pins
         GPIO.setup(self.serialPin, GPIO.OUT)
         GPIO.setup(self.latchPin, GPIO.OUT, initial=0)
         GPIO.setup(self.clockPin, GPIO.OUT, initial=0)
 
-    # Private method to ping the clock or latch pin
+    # method that pings either clock or latch pin
     def __ping(self, pin):
         GPIO.output(pin, 1)
         time.sleep(0)
         GPIO.output(pin, 0)
 
-    # Public method to send a byte of data to the output
+    # sends bytpe of data to output
     def shiftByte(self, data_byte):
         for i in range(8):
             GPIO.output(self.serialPin, data_byte & (1 << i))
             self.__ping(self.clockPin)  # add bit to register
         self.__ping(self.latchPin)  # send register to output
 
-# Test code - you can remove this later
-if __name__ == "__main__":
     try:
         shifter = Shifter(23, 25, 24)  # data, clock, latch pins
         while True:
