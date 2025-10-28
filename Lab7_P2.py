@@ -130,6 +130,10 @@ def serve_web_page():
         # send body in try block in case connection is interrupted:
         try:
             conn.sendall(web_page())                    # body
+        except:
+            for pwm in led_pwm:
+                pwm.stop()
+            GPIO.cleanup()
         finally:
             conn.close()
 
