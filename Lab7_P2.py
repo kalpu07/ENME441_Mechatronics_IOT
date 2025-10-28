@@ -22,7 +22,9 @@ led_pwm = []
 
 for pin in pins:
     GPIO.setup(pin, GPIO.OUT)
-    pwm = GPIO.PWM(pin, 1000)  # 1000 Hz frequency
+    # Turn off initially to ensure clean state
+    GPIO.output(pin, GPIO.LOW)
+    pwm = GPIO.PWM(pin, 100)  # Lower frequency to 100Hz for better response
     pwm.start(0)  # Start with 0% duty cycle
     led_pwm.append(pwm)
 
