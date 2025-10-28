@@ -23,14 +23,17 @@ for p in pins: GPIO.setup(p, GPIO.IN)
 def web_page():
     rows = [f'<tr><td>{p}</td><td>{GPIO.input(p)}</td></tr>' for p in pins]
     html = """
-        <html>
-        <head> <title>GPIO Pins</title> </head>
-        <body> <h1>Pin States</h1>
-        <table border="1"> <tr><th>Pin</th><th>Value</th></tr>
-        """ + '\n'.join(rows) + """
-        </table>
+    <html>
+        <head> 
+            <title>GPIO Pins</title> 
+        </head>
+        <body> 
+            <h1>Select LED</h1>
+            <button class="choice-btn" onclick="selectChoice('LED1')">LED1) LED 1</button>
+            <button class="choice-btn" onclick="selectChoice('LED2')">LED2) LED 2</button>
+            <button class="choice-btn" onclick="selectChoice('LED3')">LED3) LED 3</button>
         </body>
-        </html>
+    </html>
         """
     print(html)
     return (bytes(html,'utf-8'))   # convert string to UTF-8 bytes object
