@@ -64,11 +64,11 @@ def web_page():
                 <h3> Brightness Level: </h3>
                 <input type="range" name="brightness" min ="0" max="100" value ="500"/>
                 <h3> Select LED: </h3>
-                <input type="radio" name="led" value="1"> <p> LED1: {brightnesses[0]}% </p>
+                <p> <input type="radio" name="led" value="1"> LED1: {brightnesses[0]}% </p>
                 <br/>
-                <input type="radio" name="led" value="2"> <p> LED2: {brightnesses[1]}% </p>
+                <p> <input type="radio" name="led" value="2"> LED2: {brightnesses[1]}% </p>
                 <br/>
-                <input type="radio" name="led" value="3"> <p> LED3: {brightnesses[2]}% </p>
+                <p> <input type="radio" name="led" value="3"> LED3: {brightnesses[2]}% </p>
                 <br/>
                 <input type="submit" name="submit" value="Change Brightness">
             </form>
