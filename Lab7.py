@@ -39,6 +39,7 @@ def web_page():
                 <br/>
                 <input type="radio" name="led type" value="LED3"> LED3
                 <br/>
+                <input type="submit" name="submit" value="Change Brightness"> Change Brightness
             </form>
         </body>
     </html>
