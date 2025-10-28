@@ -29,10 +29,9 @@ def web_page():
         </head>
         <body> 
             <h1>Select LED</h1>
-            <h5> Brightness Level: </h5>
             <form action="/cgi-bin/range.py" method="POST">
+                <h5> Brightness Level: </h5>
                 <input type="range" name="led brightness" min ="0" max="1000" value ="500"/>
-                <br>
                 <h5> Select LED: </h5>
                 <input type="radio" name="led type" value="LED1"> LED1
                 <br/>
