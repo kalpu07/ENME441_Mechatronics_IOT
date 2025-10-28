@@ -88,8 +88,6 @@ class Bug:
             # Bounce off edges
             if 0 <= new_x <= 7:
                 self.x = new_x
-                
-        print(f"LED should be at position {self.x}")
         
         # Update LED display
         self.__shifter.shiftByte(1 << self.x)
