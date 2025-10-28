@@ -29,9 +29,9 @@ def web_page():
         </head>
         <body> 
             <h1>Select LED</h1>
-            <button class="choice-btn" onclick="selectChoice('LED1')">LED1) LED 1</button>
-            <button class="choice-btn" onclick="selectChoice('LED2')">LED2) LED 2</button>
-            <button class="choice-btn" onclick="selectChoice('LED3')">LED3) LED 3</button>
+            <input type="radio" name="led type" value="LED1">
+            <input type="radio" name="led type" value="LED2">
+            <input type="radio" name="led type" value="LED3">
         </body>
     </html>
         """
