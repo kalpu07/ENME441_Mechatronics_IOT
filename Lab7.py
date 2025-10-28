@@ -25,15 +25,15 @@ def web_page():
     html = """
     <html>
         <head> 
-            <title>GPIO Pins</title> 
+            <title>LED LEVELS</title> 
         </head>
         <body> 
             <h1>Select LED</h1>
+            <h5> Brightness Level: </h5>
             <form action="/cgi-bin/range.py" method="POST">
-                <input type="range" name="slider1" min ="0" max="1000" value ="500"/>
+                <input type="range" name="led brightness" min ="0" max="1000" value ="500"/>
                 <br>
-                <input type="range" name="slider2" min ="100" max="500" value ="300"/>
-                <input type="submit" value="Submit">
+                <h5> Select LED: </h5>
                 <input type="radio" name="led type" value="LED1"> LED1
                 <br/>
                 <input type="radio" name="led type" value="LED2"> LED2
