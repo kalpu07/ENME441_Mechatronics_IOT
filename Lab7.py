@@ -26,29 +26,17 @@ for pin in pins:
     pwm.start(0)  # Start with 0% duty cycle
     led_pwm.append(pwm)
 
-# Put this function near the top of your code, after the imports
-def read_form_data(request_data):
-    # Convert bytes to string
-    request_text = request_data.decode('utf-8')
-    
-    # Find where the form data starts (after the blank line)
-    blank_line = request_text.find('\r\n\r\n')
-    if blank_line == -1:
-        return {}  # No form data found
-    
-    # Get just the form data part
-    form_data = request_text[blank_line + 4:]
-    
-    # Split into key=value pairs
-    result = {}
-    pairs = form_data.split('&')
-    
-    for pair in pairs:
-        if '=' in pair:
-            key, value = pair.split('=', 1)  # Split on first '=' only
-            result[key] = value
-    
-    return result
+#Code got fromm Professors prasePOSdata
+def parsePOSTdata(data):
+    data_dict = {}
+    idx = data.find('\r\n\r\n')+4
+    data = data[idx:]
+    data_pairs = data.split('&')
+    for pair in data_pairs:
+        key_val = pair.split('=')
+        if len(key_val) == 2:
+            data_dict[key_val[0]] = key_val[1]
+    return data_dict
 
 # Generate HTML for the web page:
 def web_page():
@@ -89,7 +77,7 @@ def serve_web_page():
 
         if request.startswith(b'POST'):
         # Use our simple function to read the form data
-            form_data = read_form_data(request)
+            form_data = parsePOSTdata(request.decode('utf-8'))
     
             # Now you can get the values
             if 'led' in form_data and 'brightness' in form_data:
