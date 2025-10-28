@@ -29,12 +29,18 @@ def web_page():
         </head>
         <body> 
             <h1>Select LED</h1>
-            <input type="radio" name="led type" value="LED1"> LED1
-            <br/>
-            <input type="radio" name="led type" value="LED2"> LED2
-            <br/>
-            <input type="radio" name="led type" value="LED3"> LED3
-            <br/>
+            <form action="/cgi-bin/range.py" method="POST">
+                <input type="range" name="slider1" min ="0" max="1000" value ="500"/>
+                <br>
+                <input type="range" name="slider2" min ="100" max="500" value ="300"/>
+                <input type="submit" value="Submit">
+                <input type="radio" name="led type" value="LED1"> LED1
+                <br/>
+                <input type="radio" name="led type" value="LED2"> LED2
+                <br/>
+                <input type="radio" name="led type" value="LED3"> LED3
+                <br/>
+            </form>
         </body>
     </html>
         """
