@@ -14,9 +14,9 @@ GPIO.cleanup()
 GPIO.setmode(GPIO.BCM)
 
 #Setting Pin Values
-pin_1 = 17
-pin_2 = 22
-pin_3 = 27
+pin_1 = 18
+pin_2 = 23
+pin_3 = 24
 
 brightnesses = [0, 0, 0]
 led_pwm = []
