@@ -73,53 +73,50 @@ def web_page():
                 input[type="range"] {{ width: 300px; }}
             </style>
             <script>
+                let timeoutId = null;
+                
                 function updateLED(ledNumber, brightness) {{
-                    // Create XMLHttpRequest to send POST without page reload
-                    var xhr = new XMLHttpRequest();
-                    xhr.open("POST", "/", true);
-                    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                    
-                    // Send the LED number and brightness value
-                    var data = "led=" + ledNumber + "&brightness=" + brightness;
-                    xhr.send(data);
-                    
-                    // Update the display for this LED
+                    // Update display immediately for responsiveness
                     document.getElementById("value" + ledNumber).innerText = brightness + "%";
                     
-                    console.log("LED " + ledNumber + " set to " + brightness + "%");
+                    // Clear any pending request
+                    if (timeoutId) clearTimeout(timeoutId);
+                    
+                    // Send request after a short delay (debounce)
+                    timeoutId = setTimeout(function() {{
+                        var xhr = new XMLHttpRequest();
+                        xhr.open("POST", "/", true);
+                        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                        var data = "led=" + ledNumber + "&brightness=" + brightness;
+                        xhr.send(data);
+                        console.log("LED " + ledNumber + " set to " + brightness + "%");
+                    }}, 100); // 100ms delay
                 }}
             </script>
         </head>
         <body> 
             <h1>LED Brightness Control</h1>
-            <p><em>Move any slider to instantly update brightness - no submit button needed!</em></p>
+            <p><em>Move any slider to instantly update brightness</em></p>
             
             <div class="slider-container">
                 <div class="slider-label">LED1</div>
                 <input type="range" min="0" max="100" value="{brightnesses[0]}" 
-                       oninput="updateLED(1, this.value)"
-                       onchange="updateLED(1, this.value)">
+                       oninput="updateLED(1, this.value)">
                 <span class="value-display" id="value1">{brightnesses[0]}%</span>
             </div>
             
             <div class="slider-container">
                 <div class="slider-label">LED2</div>
                 <input type="range" min="0" max="100" value="{brightnesses[1]}" 
-                       oninput="updateLED(2, this.value)"
-                       onchange="updateLED(2, this.value)">
+                       oninput="updateLED(2, this.value)">
                 <span class="value-display" id="value2">{brightnesses[1]}%</span>
             </div>
             
             <div class="slider-container">
                 <div class="slider-label">LED3</div>
                 <input type="range" min="0" max="100" value="{brightnesses[2]}" 
-                       oninput="updateLED(3, this.value)"
-                       onchange="updateLED(3, this.value)">
+                       oninput="updateLED(3, this.value)">
                 <span class="value-display" id="value3">{brightnesses[2]}%</span>
-            </div>
-            
-            <div style="margin-top: 30px; color: #666;">
-                <p>Changes are applied instantly without page reload.</p>
             </div>
         </body>
     </html>
