@@ -40,10 +40,10 @@ try:
     led_pwm.append(pwm_2)
     led_pwm.append(pwm_3)
 
-    print("GPIO SETUP")
+    print("GPIO SETUP IS WORKING")
 
 except Exception as e:
-    print(f"GPIO setup error: {e}")
+    print(f"GPIO PIN Setup ISSUE!!!!: {e}")
     exit(1)
 
 #Parse Helper Function @web_gpio_POST.py

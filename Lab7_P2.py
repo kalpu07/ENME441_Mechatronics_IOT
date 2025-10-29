@@ -1,34 +1,52 @@
-# webserver.py
+# Kalp Upadhayay 
+# ENME441 - Fall - 2025
 #
-# Web server via sockets.
-#
-# When contacted by a client (web browser), send a web page
-# displaying the states of selected GPIO pins.
-#
-# Must run as sudo to access port 80.  
-#
-# Port 8080 is a non-privileged alternative to port 80 that can
-# be used to avoid the need for sudo, if desired.
+# Lab 7 Question 2 Code
+# 
+# Note: webserver.py code used and built on top of 
 
 import socket
 import RPi.GPIO as GPIO
 import time
 
+GPIO.cleanup()
+
 GPIO.setmode(GPIO.BCM)
 
-pins = [17,22,27]
+#Setting Pin Values
+pin_1 = 18
+pin_2 = 23
+pin_3 = 24
+
 brightnesses = [0, 0, 0]
 led_pwm = []
 
-for pin in pins:
-    GPIO.setup(pin, GPIO.OUT)
-    # Turn off initially to ensure clean state
-    GPIO.output(pin, GPIO.LOW)
-    pwm = GPIO.PWM(pin, 100)  # Lower frequency to 100Hz for better response
-    pwm.start(0)  # Start with 0% duty cycle
-    led_pwm.append(pwm)
+#Setting Up PWM for each of three LEDS
 
-#Code got fromm Professors prasePOSdata
+try:
+    GPIO.setup(pin_1, GPIO.OUT)
+    GPIO.setup(pin_2, GPIO.OUT)
+    GPIO.setup(pin_3, GPIO.OUT)
+
+    pwm_1 = GPIO.PWM(pin_1, 100)
+    pwm_2 = GPIO.PWM(pin_2, 100)
+    pwm_3 = GPIO.PWM(pin_3, 100)
+
+    pwm_1.start(0)
+    pwm_2.start(0)
+    pwm_3.start(0)
+
+    led_pwm.append(pwm_1)
+    led_pwm.append(pwm_2)
+    led_pwm.append(pwm_3)
+
+    print("GPIO SETUP IS WORKING")
+
+except Exception as e:
+    print(f"GPIO PIN Setup ISSUE!!!!: {e}")
+    exit(1)
+
+#Parse Helper Function @web_gpio_POST.py
 def parsePOSTdata(data):
     data_dict = {}
     idx = data.find('\r\n\r\n')+4
@@ -40,57 +58,69 @@ def parsePOSTdata(data):
             data_dict[key_val[0]] = key_val[1]
     return data_dict
 
-# Generate HTML for the web page:
-# Generate HTML for the web page with Javascript:
+# Generate HTML for the web page: Referenced webserver.py sample code
+# Generate HTML for the web page with Javascript for automatic updates
 def web_page():
     html = f"""
     <html>
         <head> 
-            <title>LED Control</title> 
+            <title>LED Brightness Control</title> 
+            <style>
+                body {{ font-family: Arial, sans-serif; margin: 40px; }}
+                .slider-container {{ margin: 25px 0; }}
+                .slider-label {{ font-weight: bold; margin-bottom: 5px; }}
+                .value-display {{ margin-left: 15px; font-weight: bold; }}
+                input[type="range"] {{ width: 300px; }}
+            </style>
             <script>
                 function updateLED(ledNumber, brightness) {{
-                    // Send POST request without reloading page
+                    // Create XMLHttpRequest to send POST without page reload
                     var xhr = new XMLHttpRequest();
                     xhr.open("POST", "/", true);
                     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
                     
-                    // Send which LED and what brightness
+                    // Send the LED number and brightness value
                     var data = "led=" + ledNumber + "&brightness=" + brightness;
                     xhr.send(data);
                     
                     // Update the display for this LED
                     document.getElementById("value" + ledNumber).innerText = brightness + "%";
+                    
+                    console.log("LED " + ledNumber + " set to " + brightness + "%");
                 }}
             </script>
         </head>
         <body> 
             <h1>LED Brightness Control</h1>
-            <p><strong>Move any slider to instantly update brightness</strong></p>
+            <p><em>Move any slider to instantly update brightness - no submit button needed!</em></p>
             
-            <div style="margin: 20px 0;">
-                <div style="margin: 15px 0;">
-                    <strong>LED1</strong><br>
-                    <input type="range" min="0" max="100" value="{brightnesses[0]}" 
-                           oninput="updateLED(1, this.value)">
-                    <span id="value1">{brightnesses[0]}%</span>
-                </div>
-                
-                <div style="margin: 15px 0;">
-                    <strong>LED2</strong><br>
-                    <input type="range" min="0" max="100" value="{brightnesses[1]}" 
-                           oninput="updateLED(2, this.value)">
-                    <span id="value2">{brightnesses[1]}%</span>
-                </div>
-                
-                <div style="margin: 15px 0;">
-                    <strong>LED3</strong><br>
-                    <input type="range" min="0" max="100" value="{brightnesses[2]}" 
-                           oninput="updateLED(3, this.value)">
-                    <span id="value3">{brightnesses[2]}%</span>
-                </div>
+            <div class="slider-container">
+                <div class="slider-label">LED1</div>
+                <input type="range" min="0" max="100" value="{brightnesses[0]}" 
+                       oninput="updateLED(1, this.value)"
+                       onchange="updateLED(1, this.value)">
+                <span class="value-display" id="value1">{brightnesses[0]}%</span>
             </div>
             
-            <p><em>Changes are applied instantly without page reload</em></p>
+            <div class="slider-container">
+                <div class="slider-label">LED2</div>
+                <input type="range" min="0" max="100" value="{brightnesses[1]}" 
+                       oninput="updateLED(2, this.value)"
+                       onchange="updateLED(2, this.value)">
+                <span class="value-display" id="value2">{brightnesses[1]}%</span>
+            </div>
+            
+            <div class="slider-container">
+                <div class="slider-label">LED3</div>
+                <input type="range" min="0" max="100" value="{brightnesses[2]}" 
+                       oninput="updateLED(3, this.value)"
+                       onchange="updateLED(3, this.value)">
+                <span class="value-display" id="value3">{brightnesses[2]}%</span>
+            </div>
+            
+            <div style="margin-top: 30px; color: #666;">
+                <p>Changes are applied instantly without page reload.</p>
+            </div>
         </body>
     </html>
     """
@@ -130,10 +160,6 @@ def serve_web_page():
         # send body in try block in case connection is interrupted:
         try:
             conn.sendall(web_page())                    # body
-        except:
-            for pwm in led_pwm:
-                pwm.stop()
-            GPIO.cleanup()
         finally:
             conn.close()
 
