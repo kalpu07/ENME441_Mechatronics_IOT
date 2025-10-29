@@ -1,14 +1,9 @@
-# webserver.py
+# Kalp Upadhayay 
+# ENME441 - Fall - 2025
 #
-# Web server via sockets.
-#
-# When contacted by a client (web browser), send a web page
-# displaying the states of selected GPIO pins.
-#
-# Must run as sudo to access port 80.  
-#
-# Port 8080 is a non-privileged alternative to port 80 that can
-# be used to avoid the need for sudo, if desired.
+# Lab 7 Question 1 Code
+# 
+# Note: webserver.py code used and built on top of 
 
 import socket
 import RPi.GPIO as GPIO
@@ -16,17 +11,32 @@ import time
 
 GPIO.setmode(GPIO.BCM)
 
-pins = [17,22,27]
+#Setting Pin Values
+pin_1 = 17
+pin_2 = 22
+pin_3 = 27
+
 brightnesses = [0, 0, 0]
 led_pwm = []
 
-for pin in pins:
-    GPIO.setup(pin, GPIO.OUT)
-    pwm = GPIO.PWM(pin, 1000)  # 1000 Hz frequency
-    pwm.start(0)  # Start with 0% duty cycle
-    led_pwm.append(pwm)
+#Setting Up PWM for each of three LEDS
+GPIO.setup(pin_1, GPIO.OUT)
+GPIO.setup(pin_2, GPIO.OUT)
+GPIO.setup(pin_3, GPIO.OUT)
 
-#Code got fromm Professors prasePOSdata
+pwm_1 = GPIO.PWM(pin_1, 100)
+pwm_2 = GPIO.PWM(pin_2, 100)
+pwm_3 = GPIO.PWM(pin_3, 100)
+
+pwm_1.start(0)
+pwm_2.start(0)
+pwm_3.start(0)
+
+led_pwm.append(pwm_1)
+led_pwm.append(pwm_2)
+led_pwm.append(pwm_3)
+
+#Parse Helper Function @web_gpio_POST.py
 def parsePOSTdata(data):
     data_dict = {}
     idx = data.find('\r\n\r\n')+4
@@ -38,9 +48,8 @@ def parsePOSTdata(data):
             data_dict[key_val[0]] = key_val[1]
     return data_dict
 
-# Generate HTML for the web page:
+# Generate HTML for the web page: Referenced webserver.py sample code
 def web_page():
-    rows = [f'<tr><td>{p}</td><td>{GPIO.input(p)}</td></tr>' for p in pins]
     html = f"""
     <html>
         <head> 
@@ -48,9 +57,9 @@ def web_page():
         </head>
         <body> 
             <h1>Select LED</h1>
-            <form method="POST">
+            <form action="/" method="POST">
                 <h3> Brightness Level: </h3>
-                <input type="range" name="brightness" min ="0" max="100" value ="500"/>
+                <input type="range" name="brightness" min ="0" max="100" value ="100"/>
                 <h3> Select LED: </h3>
                 <p> <input type="radio" name="led" value="1"> LED1: {brightnesses[0]}% </p>
                 <p> <input type="radio" name="led" value="2"> LED2: {brightnesses[1]}% </p>
