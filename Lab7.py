@@ -9,7 +9,7 @@ import socket
 import RPi.GPIO as GPIO
 import time
 
-GPIO.cleanp()
+GPIO.cleanup()
 
 GPIO.setmode(GPIO.BCM)
 
