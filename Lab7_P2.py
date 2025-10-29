@@ -4,6 +4,8 @@
 # Lab 7 Question 2 Code
 # 
 # Note: webserver.py code used and built on top of 
+# Can select an LED and adjust its bridhgness through Web interface, but this time automatic slider updates 
+#Python remained the same webpage function used LLM 
 
 import socket
 import RPi.GPIO as GPIO
@@ -18,24 +20,32 @@ pin_1 = 18
 pin_2 = 23
 pin_3 = 24
 
+#Used for tracking all LEDs
 brightnesses = [0, 0, 0]
+
+#Stores the PWM objects 
 led_pwm = []
 
 #Setting Up PWM for each of three LEDS
 
+#I used for Debugging Purposes -------------------------------
 try:
+    #Setting up all GPIO Pins
     GPIO.setup(pin_1, GPIO.OUT)
     GPIO.setup(pin_2, GPIO.OUT)
     GPIO.setup(pin_3, GPIO.OUT)
 
+    #Instances being created for all three PWMs leds
     pwm_1 = GPIO.PWM(pin_1, 100)
     pwm_2 = GPIO.PWM(pin_2, 100)
     pwm_3 = GPIO.PWM(pin_3, 100)
 
+    #Starting with 0 duty cycles
     pwm_1.start(0)
     pwm_2.start(0)
     pwm_3.start(0)
 
+    #Storing within List 
     led_pwm.append(pwm_1)
     led_pwm.append(pwm_2)
     led_pwm.append(pwm_3)
@@ -43,7 +53,7 @@ try:
     print("GPIO SETUP IS WORKING")
 
 except Exception as e:
-    print(f"GPIO PIN Setup ISSUE!!!!: {e}")
+    print(f"GPIO PIN Setup NOT WORKING: {e}")
     exit(1)
 
 #Parse Helper Function @web_gpio_POST.py
@@ -136,17 +146,17 @@ def serve_web_page():
         print(f'Connection from {client_ip}')   
 
         if request.startswith(b'POST'):
-        # Use our simple function to read the form data
+        # Reading Form Data through Parse
             form_data = parsePOSTdata(request.decode('utf-8'))
     
             # Now you can get the values
             if 'led' in form_data and 'brightness' in form_data:
-                led_number = int(form_data['led'])  # Convert string to number
-                brightness = int(form_data['brightness'])  # Convert string to number
+                led_number = int(form_data['led'])  #Both strings get converted to numbers
+                brightness = int(form_data['brightness'])  
 
-                led_index = led_number - 1  # Convert to 0-based index (LED1=0, LED2=1, LED3=2)
+                led_index = led_number - 1  # Have to subtract 1 due to indexing
                 led_pwm[led_index].ChangeDutyCycle(brightness)
-                brightnesses[led_index] = brightness  # Also update your brightness tracking array
+                brightnesses[led_index] = brightness  # Updating brightness 
             
                 # Update your LED here
                 print(f"Setting LED {led_number} to {brightness}%")
@@ -156,7 +166,7 @@ def serve_web_page():
         conn.send(b'Connection: close\r\n\r\n')   # header (tell client to close)
         # send body in try block in case connection is interrupted:
         try:
-            conn.sendall(web_page())                    # body
+            conn.sendall(web_page())                    
         finally:
             conn.close()
 
