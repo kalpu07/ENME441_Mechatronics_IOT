@@ -9,6 +9,8 @@ import socket
 import RPi.GPIO as GPIO
 import time
 
+GPIO.cleanp()
+
 GPIO.setmode(GPIO.BCM)
 
 #Setting Pin Values
@@ -20,21 +22,29 @@ brightnesses = [0, 0, 0]
 led_pwm = []
 
 #Setting Up PWM for each of three LEDS
-GPIO.setup(pin_1, GPIO.OUT)
-GPIO.setup(pin_2, GPIO.OUT)
-GPIO.setup(pin_3, GPIO.OUT)
 
-pwm_1 = GPIO.PWM(pin_1, 100)
-pwm_2 = GPIO.PWM(pin_2, 100)
-pwm_3 = GPIO.PWM(pin_3, 100)
+try:
+    GPIO.setup(pin_1, GPIO.OUT)
+    GPIO.setup(pin_2, GPIO.OUT)
+    GPIO.setup(pin_3, GPIO.OUT)
 
-pwm_1.start(0)
-pwm_2.start(0)
-pwm_3.start(0)
+    pwm_1 = GPIO.PWM(pin_1, 100)
+    pwm_2 = GPIO.PWM(pin_2, 100)
+    pwm_3 = GPIO.PWM(pin_3, 100)
 
-led_pwm.append(pwm_1)
-led_pwm.append(pwm_2)
-led_pwm.append(pwm_3)
+    pwm_1.start(0)
+    pwm_2.start(0)
+    pwm_3.start(0)
+
+    led_pwm.append(pwm_1)
+    led_pwm.append(pwm_2)
+    led_pwm.append(pwm_3)
+
+    print("GPIO SETUP")
+
+except Exception as e:
+    print(f"GPIO setup error: {e}")
+    exit(1)
 
 #Parse Helper Function @web_gpio_POST.py
 def parsePOSTdata(data):
