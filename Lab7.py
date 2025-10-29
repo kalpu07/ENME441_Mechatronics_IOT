@@ -43,7 +43,7 @@ try:
     print("GPIO SETUP IS WORKING")
 
 except Exception as e:
-    print(f"GPIO PIN Setup ISSUE!!!!: {e}")
+    print(f"GPIO PIN Setup: {e}")
     exit(1)
 
 #Parse Helper Function @web_gpio_POST.py

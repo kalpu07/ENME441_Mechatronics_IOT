@@ -59,7 +59,7 @@ def parsePOSTdata(data):
     return data_dict
 
 # Generate HTML for the web page: Referenced webserver.py sample code
-# Generate HTML for the web page with Javascript for automatic updates
+# LLM Used Deepseek for HTML, SLider, CSS and Javascript
 def web_page():
     html = f"""
     <html>
