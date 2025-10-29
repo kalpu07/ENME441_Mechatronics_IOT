@@ -92,8 +92,7 @@ def web_page():
         </head>
         <body> 
             <h1>LED Brightness Control</h1>
-            <p><em>Move any slider to instantly update brightness - no submit button needed!</em></p>
-            
+                       
             <div class="slider-container">
                 <div class="slider-label">LED1</div>
                 <input type="range" min="0" max="100" value="{brightnesses[0]}" 
@@ -118,9 +117,6 @@ def web_page():
                 <span class="value-display" id="value3">{brightnesses[2]}%</span>
             </div>
             
-            <div style="margin-top: 30px; color: #666;">
-                <p>Changes are applied instantly without page reload.</p>
-            </div>
         </body>
     </html>
     """
