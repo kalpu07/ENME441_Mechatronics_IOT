@@ -9,7 +9,7 @@
 
 import time
 import multiprocessing
-from shifter import Shifter   # our custom Shifter class
+from Lab6_shifter import Shifter   # our custom Shifter class
 
 class Stepper:
     """
